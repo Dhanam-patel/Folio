@@ -3,7 +3,6 @@ import { Download, ToggleLeft, ToggleRight, GripVertical, FileText, Plus, Trash2
 import { useProfile, useSectionConfig } from '../context/ProfileContext';
 import { SectionKey, SECTION_LABELS } from '../types/resume';
 import { HarvardResume } from './resume/HarvardResume';
-import html2pdf from 'html2pdf.js';
 
 export function ResumePreview() {
   const { profile, currentResume, setCurrentResume, resumes, deleteResume } = useProfile();
@@ -30,18 +29,24 @@ export function ResumePreview() {
     setDragging(null); setDragOver(null);
   };
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if (!printRef.current) return;
 
-    const opt = {
-      margin:       0,
-      filename:     `${profile.personal.name ? profile.personal.name.replace(/\s+/g, '_') : 'resume'}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
+    try {
+      const html2pdf = (await import('html2pdf.js')).default;
 
-    html2pdf().set(opt).from(printRef.current).save();
+      const opt = {
+        margin:       0,
+        filename:     `${profile.personal.name ? profile.personal.name.replace(/\s+/g, '_') : 'resume'}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(printRef.current).save();
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
   };
 
   return (
