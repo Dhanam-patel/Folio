@@ -1,10 +1,4 @@
-import * as pdfjsLib from 'pdfjs-dist';
-
-// Set the worker source using the vendored version
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url
-).toString();
+// Dynamic import of pdfjs-dist will be used to prevent production build crashes
 
 export interface ParsedPDFResult {
   text: string;
@@ -19,6 +13,12 @@ export interface ParsedPDFResult {
 }
 
 export async function parsePDF(file: File): Promise<ParsedPDFResult> {
+  const pdfjsLib = await import('pdfjs-dist');
+  
+  if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+  }
+
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
