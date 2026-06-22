@@ -8,7 +8,7 @@ import { parseProfilePackage } from '../lib/profilePackage';
 import { parseResumeWithAI, buildProfileFromParsedData, ParsedResumeData } from '../lib/resumeParser';
 import { parsePDF, categorizeLinks, ParsedPDFResult } from '../lib/pdfParser';
 import { Input, Textarea, Button, Badge } from '../components/ui';
-import { DHANAM_PROFILE } from '../lib/demoProfile';
+import { DEMO_PROFILE } from '../lib/demoProfile';
 
 type Mode = 'hero' | 'create' | 'upload' | 'resume-import';
 
@@ -55,7 +55,7 @@ export function Onboarding() {
   };
 
   const handleLoadDemo = () => {
-    setProfile(DHANAM_PROFILE);
+    setProfile(DEMO_PROFILE);
     showToast('Demo profile loaded', 'success');
     setView('profile');
   };
@@ -175,7 +175,7 @@ export function Onboarding() {
               <hr className="flex-1 border-dark-200/40" />
             </div>
             <button onClick={handleLoadDemo} className="w-full text-sm text-brand-600 hover:text-brand-700 font-semibold py-2.5 border border-brand-200 hover:border-brand-300 hover:bg-brand-50 rounded-xl transition-all">
-              Load demo profile (Dhanam Patel)
+              Load demo profile (Alex Carter)
             </button>
           </div>
         </div>
@@ -382,7 +382,7 @@ export function Onboarding() {
               onClick={handleLoadDemo}
               className="w-full text-sm text-brand-600 hover:text-brand-700 font-semibold py-2.5 border border-brand-200 hover:border-brand-300 hover:bg-brand-50 rounded-xl transition-all"
             >
-              Load demo profile instead (Dhanam Patel)
+              Load demo profile instead (Alex Carter)
             </button>
           </div>
         </div>

@@ -29,30 +29,14 @@ export function ResumePreview() {
     setDragging(null); setDragOver(null);
   };
 
-  const handlePrint = async () => {
-    if (!printRef.current) return;
-
-    try {
-      const html2pdf = (await import('html2pdf.js')).default;
-
-      const opt = {
-        margin:       0,
-        filename:     `${profile.personal.name ? profile.personal.name.replace(/\s+/g, '_') : 'resume'}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(printRef.current).save();
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-    }
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
-    <div className="flex-1 flex overflow-hidden bg-[#f0f4ff]">
+    <div className="flex-1 flex overflow-hidden bg-[#f0f4ff] print:block print:overflow-visible print:bg-white">
       {/* Section controls */}
-      <div className="w-52 bg-white border-r border-dark-200/50 flex-shrink-0 flex flex-col">
+      <div className="w-52 bg-white border-r border-dark-200/50 flex-shrink-0 flex flex-col print:hidden">
         {/* Resume Selector */}
         <div className="p-4 border-b border-dark-200/30">
           <div className="relative">
@@ -165,13 +149,14 @@ export function ResumePreview() {
             <Download size={13} />
             Download PDF
           </button>
+          <p className="text-[10px] text-dark-700/40 text-center">Print dialog → Save as PDF</p>
         </div>
       </div>
 
       {/* Resume canvas */}
-      <div className="flex-1 overflow-y-auto bg-dark-100/50">
-        <div className="py-8 flex justify-center min-h-full">
-          <div ref={printRef} className="print-area drop-shadow-xl">
+      <div className="flex-1 overflow-y-auto bg-dark-100/50 print:block print:overflow-visible print:bg-white">
+        <div className="py-8 flex justify-center min-h-full print:py-0 print:block print:min-h-0">
+          <div ref={printRef} className="print-area drop-shadow-xl print:shadow-none print:w-full">
             <HarvardResume profile={profile} sectionOrder={visibleSections} />
           </div>
         </div>

@@ -24,11 +24,15 @@ function AppShell() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f0f4ff]">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
-        <main className="flex-1 flex overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-[#f0f4ff] print:block print:h-auto print:bg-white print:overflow-visible">
+      <div className="print:hidden h-full">
+        <Sidebar />
+      </div>
+      <div className="flex-1 flex flex-col overflow-hidden print:block print:overflow-visible">
+        <div className="print:hidden">
+          <Header />
+        </div>
+        <main className="flex-1 flex overflow-hidden print:block print:overflow-visible">
           {view === 'profile' && <ProfileEditor />}
           {view === 'workspace' && <Workspace />}
           {view === 'preview' && <ResumePreview />}
@@ -36,7 +40,9 @@ function AppShell() {
           {view === 'settings' && <Settings />}
         </main>
       </div>
-      <Toast />
+      <div className="print:hidden">
+        <Toast />
+      </div>
     </div>
   );
 }
